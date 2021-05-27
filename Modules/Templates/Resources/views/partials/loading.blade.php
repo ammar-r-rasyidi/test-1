@@ -1,0 +1,1 @@
+<div class="loading"><img src="{{url('loading.svg')}}"></div>

@@ -1,0 +1,9 @@
+{
+    "Templates": true,
+    "Homepages": true,
+    "Companies": true,
+    "Employees": true,
+    "Dashboard": true,
+    "Authentication": true,
+    "Reference": true
+}
