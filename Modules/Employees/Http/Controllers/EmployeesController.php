@@ -183,12 +183,6 @@ class EmployeesController extends Controller
 
         if($employees){
 
-          if(!empty($employees->logo)){
-            if (file_exists(public_path('storage')."/".$employees->logo)) {
-                unlink(public_path('storage')."/".$employees->logo);
-            }
-          }
-
           Employees::findorFail($id)->delete();
 
           return response()->json([
