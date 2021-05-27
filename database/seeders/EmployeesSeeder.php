@@ -24,7 +24,6 @@ class EmployeesSeeder extends Seeder
 				    'first_name' => 'jhon',
 				    'last_name' => 'doe 1',
 				    'company_id' => 1,
-				    'website' => NULL,
 				    'phone' => '1234567890',
 				    'email' => 'john.doe.1@test.com',
 				    'created_at' => '2021-05-26T17:17:44',

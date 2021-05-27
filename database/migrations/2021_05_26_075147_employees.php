@@ -18,7 +18,6 @@ class Employees extends Migration
             $table->string('first_name', 200)->nullable();
             $table->string('last_name', 200)->nullable();
             $table->foreignId('company_id')->nullable()->constrained('companies');
-            $table->string('website', 200)->nullable();
             $table->string('phone', 200)->nullable();
             $table->string('email', 200)->nullable();
             $table->timestamps();

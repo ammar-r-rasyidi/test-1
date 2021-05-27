@@ -105,10 +105,10 @@ class CompaniesController extends Controller
             $stored_file = $file->storeAs('files_upload/logo', $name."_".$current_timestamp.$extension, "public");
 
             $input['logo'] = $stored_file;
-            unset($input['MAX_FILE_SIZE']);
           }
 
-
+          unset($input['MAX_FILE_SIZE']);
+          
           $companies = Companies::create($input);
 
           return response()->json([
@@ -178,8 +178,9 @@ class CompaniesController extends Controller
             $stored_file = $file->storeAs('files_upload/logo', $name."_".$current_timestamp.$extension, "public");
 
             $input['logo'] = $stored_file;
-            unset($input['MAX_FILE_SIZE']);
           }
+
+          unset($input['MAX_FILE_SIZE']);
 
           $companies->update($input);
 

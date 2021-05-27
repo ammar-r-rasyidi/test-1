@@ -140,7 +140,7 @@ class EmployeesController extends Controller
       if($request->ajax()){
 
         $validator = Validator::make($request->all(), [
-          'first_name'     => 'required|max:255|unique:employees,'.$id,
+          // 'first_name'     => 'required|max:255|unique:employees,first_name,last_name,'.$id,
           'last_name'      => 'required|max:255'
         ]);
 
@@ -148,8 +148,7 @@ class EmployeesController extends Controller
 
         if($validator->passes()){
           
-          $employees = Employees::findOrFail($id);
-
+          $employees = Employees::where('id', $id)->first();
           $employees->update($input);
 
           return response()->json([
