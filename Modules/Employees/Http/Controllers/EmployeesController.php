@@ -140,7 +140,7 @@ class EmployeesController extends Controller
       if($request->ajax()){
 
         $validator = Validator::make($request->all(), [
-          // 'first_name'     => 'required|max:255|unique:employees,first_name,last_name,'.$id,
+          'first_name'     => 'required|max:255|unique:employees,id,'.$id,
           'last_name'      => 'required|max:255'
         ]);
 
