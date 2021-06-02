@@ -63,8 +63,6 @@
             data: function (params) {
               return {
                 q: $.trim(params.term),
-                module: 'Companies',
-                model: 'Companies',
                 fields: ['id', 'name'],
                 hidden_fields: []
               };

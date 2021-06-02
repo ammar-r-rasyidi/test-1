@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 use DB;
+use App\Models\Companies;
 
 class ReferenceController extends Controller
 {
@@ -22,12 +23,6 @@ class ReferenceController extends Controller
 
       if(in_array(strtolower($request->module), $module_restriction)){
         abort('404');
-      }
-
-      $module = "\Modules\\".$request->module."\\Models\\".$request->model;
-      
-      if (!is_subclass_of($module, 'Illuminate\Database\Eloquent\Model')) {
-        abort('404');        
       }
 
       if(!$request->has('fields')){
@@ -48,7 +43,7 @@ class ReferenceController extends Controller
         $fields[] = $request->extra_id;
       }
 
-      $model = $module::select($fields);
+      $model = Companies::select($fields);
 
       if($request->has('jenjang') && $request->has('jenjang')){
         $model->where('jenjang', $request->jenjang);
