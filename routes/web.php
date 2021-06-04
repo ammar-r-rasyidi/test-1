@@ -32,6 +32,16 @@ Route::group([
 		'uses' 		 => 'App\Http\Controllers\DashboardController@index',
 	]);
 
+	Route::get('quotes', [
+		'as'   		 => 'dashboard.index',
+		'uses' 		 => 'App\Http\Controllers\QuoteController@index',
+	]);
+
+	Route::post('quotes', [
+		'as'   		 => 'dashboard.index',
+		'uses' 		 => 'App\Http\Controllers\QuoteController@index',
+	]);
+
 });
 
 Route::group([

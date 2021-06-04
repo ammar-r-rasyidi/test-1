@@ -20,6 +20,14 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ url('dashboard/quotes') }}" class="nav-link">
+              <i class="nav-icon fas fa-quote-right"></i>
+              <p>
+                Quotes
+              </p>
+            </a>
+          </li>          
+          <li class="nav-item">
             <a href="{{ url('dashboard/companies') }}" class="nav-link">
               <i class="nav-icon fas fa-building"></i>
               <p>

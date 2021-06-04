@@ -53,6 +53,34 @@ class EmployeesController extends Controller
 
         return Datatables::of($employees)
           ->addIndexColumn()
+          ->filter(function ($query) use ($request) {
+
+            if ($request->has('email') && ! is_null($request->get('email'))){
+                $query->where('employees.email', $request->email);
+            }
+            
+            if ($request->has('first_name') && ! is_null($request->get('first_name'))){
+                $query->where('employees.first_name', $request->first_name);
+            }
+            
+            if ($request->has('last_name') && ! is_null($request->get('last_name'))){
+                $query->where('employees.last_name', $request->last_name);
+            }
+
+            if ($request->has('company') && ! is_null($request->get('company'))){
+                $query->where('employees.company_id', $request->company);
+            }
+
+            if ($request->has('date_start') && ! is_null($request->get('date_start'))){
+
+                $from = Carbon::parse($request->date_start)->format('Y-m-d');
+                $to = Carbon::parse($request->date_stop)->format('Y-m-d');
+
+                
+                $query->whereBetween('employees.created_at', array($from, $to));
+            }
+
+          }, true)
           ->addColumn('full_name', function ($data) {
 
             if(!empty($data->full_name)){

@@ -29,6 +29,17 @@ class EmployeesSeeder extends Seeder
 				    'created_at' => '2021-05-26T17:17:44',
 				    'updated_at' => '2021-05-26T17:17:44'
 				  ),
+				  1 => 
+				  array (
+				    'id' => 2,
+				    'first_name' => 'Marrie',
+				    'last_name' => 'Anne',
+				    'company_id' => 2,
+				    'phone' => '89182983',
+				    'email' => 'marrie.anne@test.com',
+				    'created_at' => '2021-05-26T17:17:44',
+				    'updated_at' => '2021-05-26T17:17:44'
+				  ),
 				)
 			);
     }

@@ -30,6 +30,7 @@
 @push('regular_css')
   <link rel="stylesheet" href="{{ asset('admin_lte/plugins/select2/css/select2.min.css') }}">
   <link rel="stylesheet" href="{{ asset('admin_lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('daterangepicker/daterangepicker.css') }}">
   <link href="{{ asset('file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet">
   <style type="text/css">
     table{
@@ -47,6 +48,8 @@
 
   <script src="{{ asset('admin_lte/plugins/select2/js/select2.full.min.js') }}"></script>
   <script src="{{ asset('file-upload/file-upload-with-preview.min.js') }}"></script>
+  <script src="{{ asset('moment-js/moment.min.js') }}"></script>
+  <script src="{{ asset('daterangepicker/daterangepicker.js') }}"></script>
   <script type="text/javascript">
   $(document).ready(function(){
 
@@ -64,6 +67,137 @@
               return {
                 q: $.trim(params.term),
                 fields: ['id', 'name'],
+                module: "Companies",
+                hidden_fields: []
+              };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            error: function (jqXHR, status, error) {
+                return { results: [] };
+            },
+            cache: true
+        }
+      })
+
+      $('.date-range-filter-date-added').daterangepicker({
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          },
+          alwaysShowCalendars: true,
+          applyButtonClasses: "btn-info rounded",
+          cancelClass: "btn-secondary rounded mr-2",
+          opens: "left",
+      },function(start, end, label) {
+        $("#date_start").val(start.format('DD-MM-YYYY'));
+        $("#date_stop").val(end.format('DD-MM-YYYY'));
+      });
+
+      $('.select2-filter-email').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select Email",
+        delay: 350,
+        ajax: {
+            url: "{{route('reference.search')}}",
+            dataType: 'json',
+            data: function (params) {
+              return {
+                q: $.trim(params.term),
+                fields: ['id', 'email'],
+                module: "Employees",
+                hidden_fields: []
+              };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            error: function (jqXHR, status, error) {
+                return { results: [] };
+            },
+            cache: true
+        }
+      })
+
+      $('.select2-filter-first-name').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select First Name",
+        delay: 350,
+        ajax: {
+            url: "{{route('reference.search')}}",
+            dataType: 'json',
+            data: function (params) {
+              return {
+                q: $.trim(params.term),
+                fields: ['id', 'first_name'],
+                module: "Employees",
+                hidden_fields: []
+              };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            error: function (jqXHR, status, error) {
+                return { results: [] };
+            },
+            cache: true
+        }
+      })
+
+      $('.select2-filter-last-name').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select Last Name",
+        delay: 350,
+        ajax: {
+            url: "{{route('reference.search')}}",
+            dataType: 'json',
+            data: function (params) {
+              return {
+                q: $.trim(params.term),
+                fields: ['id', 'last_name'],
+                module: "Employees",
+                hidden_fields: []
+              };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            error: function (jqXHR, status, error) {
+                return { results: [] };
+            },
+            cache: true
+        }
+      })
+
+      $('.select2-filter-companies').select2({
+        theme: 'bootstrap4',
+        allowClear: true,
+        placeholder: "Select Company",
+        delay: 350,
+        ajax: {
+            url: "{{route('reference.search')}}",
+            dataType: 'json',
+            data: function (params) {
+              return {
+                q: $.trim(params.term),
+                fields: ['id', 'name'],
+                module: "Companies",
                 hidden_fields: []
               };
             },
@@ -89,7 +223,15 @@
           serverSide: true,
           ajax: {
             url: "{{url('dashboard/employees')}}",
-            type: "POST"
+            type: "POST",
+            data: function (d) {
+              d.date_start  = $('#date_start').val(),
+              d.date_stop   = $('#date_stop').val(),
+              d.email       = $('.select2-filter-email option:selected').text(),
+              d.first_name  = $('.select2-filter-first-name option:selected').text(),
+              d.last_name   = $('.select2-filter-last-name option:selected').text(),
+              d.company     = $('.select2-filter-companies').val()
+            }
           },
           columnDefs: [          
             {
@@ -139,8 +281,14 @@
 
       $(window).resize(function() {
         table.cell( 0, 0 ).draw();
-        table.fixedColumns().update();
       });
+
+      $(document).on("change", ".select2-filter-email, .select2-filter-first-name, .select2-filter-last-name, .select2-filter-companies, .date-range-filter-date-added", function() {
+
+        table.ajax.url("{{url('dashboard/employees')}}").load();
+
+      });
+      
     /*end of datatable initialization*/
 
     /*tabs actions button*/
@@ -416,6 +564,46 @@
   </div>
   <div class="card-body tab-content mt-1">
     <div class="tab-pane fade show active" id="employees-index" role="tabpanel" aria-labelledby="employees-create-tab">
+      <div class="col-12 my-5">
+        <div id="filter" class="row px-4 mt-3">
+          <div class="col">
+            <div class='form-group'>
+              <label>Date Added</label>
+              <input type='text' class='form-control date-range-filter-date-added' name='created_at' id='range_tanggal' required>
+              <input id="date_start" type="hidden" name="date_start" value="">
+              <input id="date_stop" type="hidden" name="date_stop" value="">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label>Email</label>
+              <select class="form-control select2-filter-email" name="filter_email" style="width: 100%;">
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label>First Name</label>
+              <select class="form-control select2-filter-first-name" name="filter_first_name" style="width: 100%;">
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label>Last Name</label>
+              <select class="form-control select2-filter-last-name" name="filter_last_name" style="width: 100%;">
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label>Company</label>
+              <select class="form-control select2-filter-companies" name="filter_company" style="width: 100%;">
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="col-12 mt-5">
          <table style="width: 100%" id="employees" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0">
           <thead class="text-info">
